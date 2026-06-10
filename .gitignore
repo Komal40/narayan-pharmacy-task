@@ -1,6 +1,7 @@
 backend/__pycache__/
 backend/.env
 backend/pharmacy.db
+backend/.venv/
 
 frontend/node_modules/
 frontend/dist/
