@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+# client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
 
 def build_drug_combination_key(drugs: list[dict]) -> str:
@@ -17,8 +17,56 @@ def build_drug_combination_key(drugs: list[dict]) -> str:
     drug_names = sorted([d["name"].strip().lower() for d in drugs])
     return "|".join(drug_names)
 
-
 def check_drug_interactions(drugs: list[dict]) -> dict:
+    # Mock implementation approved by hiring team
+
+    drug_names = [d["name"] for d in drugs]
+
+    if len(drugs) == 1:
+        severity = "None"
+        has_interactions = False
+        interactions = []
+        summary = "Only one medication provided. No interaction check required."
+    elif len(drugs) <= 3:
+        severity = "Mild"
+        has_interactions = True
+        interactions = [
+            {
+                "drugs_involved": drug_names[:2],
+                "severity": "Mild",
+                "effect": "Potential interaction detected between prescribed medications.",
+                "recommendation": "Review patient history and monitor as needed."
+            }
+        ]
+        summary = f"Potential mild interaction detected among {len(drugs)} medications."
+    else:
+        severity = "Moderate"
+        has_interactions = True
+        interactions = [
+            {
+                "drugs_involved": drug_names[:2],
+                "severity": "Moderate",
+                "effect": "Multiple medications may increase risk of adverse effects.",
+                "recommendation": "Clinical review recommended before dispensing."
+            }
+        ]
+        summary = f"Potential moderate interaction risk detected among {len(drugs)} medications."
+
+    return {
+        "success": True,
+        "severity": severity,
+        "result": {
+            "has_interactions": has_interactions,
+            "severity": severity,
+            "summary": summary,
+            "interactions": interactions,
+            "general_advice": "Mock AI analysis generated for assessment purposes."
+        },
+        "raw_text": "mock_response"
+    }
+
+
+def check_drug_interaction(drugs: list[dict]) -> dict:
     """
     Calls Claude API with a pharmacy-specific prompt.
     Returns dict with: result (str), severity (str), success (bool)
