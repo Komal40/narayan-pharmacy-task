@@ -31,17 +31,12 @@ apiClient.interceptors.response.use(
   }
 );
 
-// ─── Generic Dynamic Request Function ────────────────────────────────────────
-/**
- * makeRequest<T>(config)
- *
- * Pass any AxiosRequestConfig — method, url, data, params.
- * Returns typed AxiosResponse<T>.
- *
- * Usage:
- *   makeRequest<User>({ method: 'GET', url: '/users/1' })
- *   makeRequest<User>({ method: 'POST', url: '/users', data: payload })
- */
+export interface ApiResponse<T> {
+  status: boolean;
+  statusCode: number;
+  data: T;
+}
+
 export const makeRequest = <T>(
   config: AxiosRequestConfig
 ): Promise<AxiosResponse<T>> => {

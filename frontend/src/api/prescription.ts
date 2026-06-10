@@ -1,4 +1,4 @@
-import { makeRequest } from './client';
+import { makeRequest, type ApiResponse } from './client';
 import type { AxiosResponse } from 'axios';
 import type {
   PrescriptionCreatePayload,
@@ -10,16 +10,16 @@ const prescriptionsEndPoint= '/api/prescriptions/';
 
 export const createPrescription = (
   payload: PrescriptionCreatePayload
-): Promise<AxiosResponse<PrescriptionDetail>> =>
-  makeRequest<PrescriptionDetail>({
+): Promise<AxiosResponse<ApiResponse<PrescriptionDetail>>> =>
+  makeRequest<ApiResponse<PrescriptionDetail>>({
     method: 'POST',
     url: prescriptionsEndPoint,
     data: payload,
   });
 
 
-export const getAllPrescriptions = (): Promise<AxiosResponse<PrescriptionListItem[]>> =>
-  makeRequest<PrescriptionListItem[]>({
+export const getAllPrescriptions = (): Promise<AxiosResponse<ApiResponse<PrescriptionListItem[]>>> =>
+  makeRequest<ApiResponse<PrescriptionListItem[]>>({
     method: 'GET',
     url: prescriptionsEndPoint,
   });
@@ -27,8 +27,8 @@ export const getAllPrescriptions = (): Promise<AxiosResponse<PrescriptionListIte
 
 export const getPrescriptionById = (
   id: number
-): Promise<AxiosResponse<PrescriptionDetail>> =>
-  makeRequest<PrescriptionDetail>({
+): Promise<AxiosResponse<ApiResponse<PrescriptionDetail>>> =>
+  makeRequest<ApiResponse<PrescriptionDetail>>({
     method: 'GET',
     url: `${prescriptionsEndPoint}${id}`,
   });

@@ -5,13 +5,13 @@ import json
 
 from ..database import get_db
 from ..models import Prescription
-from ..schemas import PrescriptionCreate, PrescriptionResponse, PrescriptionListItem
+from ..schemas import PrescriptionCreate, PrescriptionResponse, PrescriptionListItem,CustomResponse
 from ..services.claude_service import check_drug_interactions, build_drug_combination_key
 
 router = APIRouter(prefix="/api/prescriptions", tags=["prescriptions"])
 
 
-@router.post("/", response_model=PrescriptionResponse)
+@router.post("/", response_model=CustomResponse)
 def create_prescription(payload: PrescriptionCreate, db: Session = Depends(get_db)):
     drugs_list = [{"name": d.name, "dosage": d.dosage} for d in payload.drugs]
     
@@ -62,16 +62,23 @@ def create_prescription(payload: PrescriptionCreate, db: Session = Depends(get_d
     db.add(prescription)
     db.commit()
     db.refresh(prescription)
-    return prescription
+    return {
+        "status": True,
+        "statusCode": 201,
+        "data": PrescriptionResponse.model_validate(
+            prescription,
+            from_attributes=True
+        )
+    }
 
 
-@router.get("/", response_model=List[PrescriptionListItem])
+@router.get("/", response_model=CustomResponse)
 def list_prescriptions(db: Session = Depends(get_db)):
     prescriptions = db.query(Prescription).order_by(
         Prescription.created_at.desc()
     ).all()
     
-    return [
+    data = [
         PrescriptionListItem(
             id=p.id,
             patient_name=p.patient_name,
@@ -85,8 +92,14 @@ def list_prescriptions(db: Session = Depends(get_db)):
         for p in prescriptions
     ]
 
+    return {
+        "status": True,
+        "statusCode": 200,
+        "data": data
+    }
 
-@router.get("/{prescription_id}", response_model=PrescriptionResponse)
+
+@router.get("/{prescription_id}", response_model=CustomResponse)
 def get_prescription(prescription_id: int, db: Session = Depends(get_db)):
     prescription = db.query(Prescription).filter(
         Prescription.id == prescription_id
@@ -94,5 +107,13 @@ def get_prescription(prescription_id: int, db: Session = Depends(get_db)):
     
     if not prescription:
         raise HTTPException(status_code=404, detail="Prescription not found")
-    
-    return prescription
+
+    return {
+        "status": True,
+        "statusCode": 200,
+        "data": PrescriptionResponse.model_validate(
+            prescription,
+            from_attributes=True
+        )
+    }
+ 

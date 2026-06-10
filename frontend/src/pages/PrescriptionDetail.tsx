@@ -16,7 +16,7 @@ export default function PrescriptionDetail() {
   useEffect(() => {
     if (!id) return;
     getPrescriptionById(Number(id))
-      .then((res) => setPrescription(res.data))
+      .then((res) => setPrescription(res.data.data))
       .catch((err: unknown) =>
         setError(err instanceof Error ? err.message : 'Prescription not found.')
       )

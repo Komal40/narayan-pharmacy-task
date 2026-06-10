@@ -60,7 +60,7 @@ export default function NewPrescription() {
         date,
         drugs,
       });
-      setResult(res.data);
+      setResult(res.data.data);
     } catch (err) {
       setError(
         err instanceof Error

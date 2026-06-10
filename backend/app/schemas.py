@@ -1,6 +1,14 @@
 from pydantic import BaseModel
 from datetime import date, datetime
 from typing import Optional, List
+from typing import Any
+
+
+class CustomResponse(BaseModel):
+    status: bool
+    statusCode: int
+    data: Any
+
 
 class DrugItem(BaseModel):
     name: str

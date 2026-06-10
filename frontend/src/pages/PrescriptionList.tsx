@@ -19,7 +19,7 @@ export default function PrescriptionsList() {
   // ─── Fetch on mount ────────────────────────────────────────────────────────
   useEffect(() => {
     getAllPrescriptions()
-      .then((res) => setData(res.data))
+      .then((res) => setData(res.data.data))
       .catch((err: unknown) =>
         setError(err instanceof Error ? err.message : 'Failed to load.')
       )
