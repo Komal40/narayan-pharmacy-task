@@ -5,7 +5,7 @@ import {
 } from "mantine-react-table";
 import { MantineProvider } from "@mantine/core";
 
-export interface CommonTableProps<T> {
+export interface CommonTableProps<T extends Record<string, any>> {
   data: T[];
   columns: MRT_ColumnDef<T>[];
   loading?: boolean;
