@@ -5,7 +5,6 @@ import axios, {
 } from 'axios';
 const BASE_URL: string = import.meta.env.VITE_API_BASE_URL as string;
 
-console.log("BASE_URL =", BASE_URL);
 // ─── Axios Instance ───────────────────────────────────────────────────────────
 const apiClient: AxiosInstance = axios.create({
   baseURL: BASE_URL,
